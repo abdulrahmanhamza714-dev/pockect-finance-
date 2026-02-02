@@ -1,0 +1,663 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pocket Finance</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#4caf50">
+
+<meta name="theme-color" content="#4caf50">
+
+<style>
+:root{
+  --bg:#f4f4f4;
+  --card-bg:#fff;
+  --text:#000;
+  --income:#4caf50;
+  --expense:#f44336;
+}
+body{
+  font-family:Arial,sans-serif;
+  margin:0;
+  padding:0;
+  background:var(--bg);
+  color:var(--text);
+}
+header{
+  background:var(--income);
+  color:white;
+  padding:20px;
+  text-align:center;
+  font-size:1em;
+}
+.container{
+  max-width:1000px;
+  margin:10px auto;
+  padding:15px;
+  background:var(--card-bg);
+  border-radius:10px;
+  box-shadow:0 4px 10px rgba(0,0,0,0.1);
+}
+h2{
+  margin-top:0;
+  font-size:1.3em;
+}
+form{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-bottom:20px;
+}
+input,select{
+  padding:10px;
+  flex:1 1 150px;
+  border-radius:5px;
+  border:1px solid #ccc;
+}
+button{
+  padding:10px 20px;
+  background:var(--income);
+  border:none;
+  color:white;
+  cursor:pointer;
+  border-radius:5px;
+  min-width:100px;
+}
+button:hover{
+  background:#45a049;
+}
+.dashboard{
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:20px;
+  flex-wrap:wrap;
+}
+.card{
+  background:#e7f5e7;
+  padding:15px;
+  flex:1;
+  margin:5px;
+  border-radius:8px;
+  text-align:center;
+  min-width:120px;
+}
+
+/* Transaction History */
+.history{
+  margin-top:0;
+  overflow-x:auto;
+  width:100%;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  font-size:0.9em;
+  table-layout:auto;
+  word-break:break-word;
+}
+th, td{
+  padding:8px;
+  border-bottom:1px solid #ddd;
+  text-align:left;
+  white-space:normal;
+}
+td button{
+  margin-left:5px;
+  padding:3px 6px;
+  font-size:12px;
+}
+
+canvas{
+  max-width:100%;
+  margin-bottom:20px;
+}
+.filter-export{
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:10px;
+  flex-wrap:wrap;
+  gap:10px;
+}
+.filter-export select, .filter-export button{
+  padding:8px;
+  border-radius:5px;
+  border:1px solid #ccc;
+}
+.income-color{color:var(--income);font-weight:bold;}
+.expense-color{color:var(--expense);font-weight:bold;}
+.settings{
+  margin-bottom:20px;
+  border:1px solid #ddd;
+  padding:10px;
+  border-radius:5px;
+  background:#f0f0f0;
+}
+
+.app-header{
+  background: var(--income);
+  color: white;
+  padding: 15px 20px;
+}
+
+.brand{
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand img{
+  width: 75px;
+  height: 75px;
+  border-radius: 14px;
+  object-fit: cover;
+}
+
+
+.app-name{
+  margin: 0;
+  font-size: 1.4em;
+}
+
+.tagline{
+  margin: 0;
+  font-size: 0.8em;
+  opacity: 0.9;
+}
+
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .dashboard {flex-direction: column;}
+  form {flex-direction: column;}
+  .filter-export {flex-direction: column;}
+  input, select, button {flex: 1 1 100%;}
+  .card {flex: 1 1 100%;}
+}
+
+@media (max-width: 600px) {
+  header {padding: 15px;font-size:0.9em;}
+  h2 {font-size:1.1em;}
+  table, th, td {font-size:0.8em;}
+  canvas {height:150px !important;}
+}
+
+@media (max-width: 385px) {
+  header {font-size:0.85em;}
+  h2 {font-size:1em;}
+  input, select, button {font-size:0.85em;padding:8px;}
+  table, th, td {font-size:0.75em;padding:5px;}
+}
+</style>
+</head>
+<body>
+<header class="app-header">
+  <div class="brand">
+    <img src="https://scontent.facc1-1.fna.fbcdn.net/v/t39.30808-6/624230780_122217096998287303_2728640232383810868_n.jpg?stp=dst-jpg_p180x540_tt6&_nc_cat=110&ccb=1-7&_nc_sid=127cfc&_nc_eui2=AeHwTKqU0u9GYKv3gL_DK8Fw0q5CE-JfnBjSrkIT4l-cGKzbDEHqvp3_ZCgwEukHHMPbZCToDjI4vf9NkFlV64Ob&_nc_ohc=npt0fGxslgEQ7kNvwEeXRNs&_nc_oc=AdmFUzWiz1gLQJtiqIjYDyjyvz9lymIK-A7cEWAsOUe_LiR6pnEhPnV0XaDvejYMhJo&_nc_zt=23&_nc_ht=scontent.facc1-1.fna&_nc_gid=IzRAdGZsKfK-EEXaQ9I80g&oh=00_AfsQqU6wOpu3Ivnz9jjVjGYItRK5Rd_x92U6lWv5TJ2OTA&oe=6985E010" alt="Pocket Finance Logo">
+    <div>
+      <h1 class="app-name">Pocket Finance</h1>
+      <p class="tagline">Track. Save. Grow.</p>
+    </div>
+  </div>
+  <p id="greeting">Hello! We’re here to help you track, manage, and grow your finances.</p>
+</header>
+
+
+<div class="container">
+
+<button id="installBtn" style="display:none;">Install App</button>
+
+<h2>Set Your Name and currency</h2>
+<div class="settings">
+<select id="currency-select">
+<option value="GHS">GHS</option>
+<option value="USD">USD</option>
+<option value="EUR">EUR</option>
+<option value="GBP">GBP</option>
+<option value="JPY">JPY</option>
+<option value="CAD">CAD</option>
+<option value="AUD">AUD</option>
+<option value="CHF">CHF</option>
+<option value="CNY">CNY</option>
+</select>
+<input type="text" id="custom-name" placeholder="Enter your name">
+<button id="set-name">Set Name</button>
+</div>
+
+<h2>Add Transaction</h2>
+<form id="transaction-form">
+<select id="type" required>
+<option value="">Type</option>
+<option value="income">Income</option>
+<option value="expense">Expense</option>
+</select>
+<input type="number" id="amount" placeholder="Amount" required step="0.01" min="0.01">
+
+<input type="text" id="category" placeholder="Category" required>
+<input type="date" id="date">
+<button type="submit">Add</button>
+</form>
+
+<div class="dashboard">
+<div class="card"><h3>Total Income</h3><p id="total-income">0</p></div>
+<div class="card"><h3>Total Expenses</h3><p id="total-expense">0</p></div>
+<div class="card"><h3>Balance</h3><p id="balance">0</p></div>
+</div>
+
+<h2>Budget Settings</h2>
+<div class="settings" id="budget-settings">
+  <input type="text" id="budget-category" placeholder="Category">
+  <input type="number" id="budget-amount" placeholder="Monthly Budget">
+  <button id="set-budget">Set Budget</button>
+</div>
+
+<h3>Budget Overview</h3>
+<div id="budget-overview" class="dashboard"></div>
+
+
+<h2>Charts</h2>
+<canvas id="incomePieChart" height="150"></canvas>
+<canvas id="expensePieChart" height="150"></canvas>
+<canvas id="balanceLineChart" height="200"></canvas>
+
+<div class="filter-export">
+<select id="month-filter"><option value="all">All Months</option></select>
+<button id="export-csv">Export CSV</button>
+</div>
+
+<h2>Transaction History</h2>
+<div class="history">
+<table id="history-table">
+<thead>
+<tr><th>Date</th><th>Type</th><th>Category</th><th>Amount</th><th>Actions</th></tr>
+</thead>
+<tbody></tbody>
+</table>
+</div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+const form=document.getElementById('transaction-form');
+const typeEl=document.getElementById('type');
+const amountEl=document.getElementById('amount');
+const categoryEl=document.getElementById('category');
+const dateEl=document.getElementById('date');
+
+const totalIncomeEl=document.getElementById('total-income');
+const totalExpenseEl=document.getElementById('total-expense');
+const balanceEl=document.getElementById('balance');
+const historyTableBody=document.querySelector('#history-table tbody');
+
+const monthFilter=document.getElementById('month-filter');
+const exportCSVBtn=document.getElementById('export-csv');
+
+const currencySelect=document.getElementById('currency-select');
+const customName=document.getElementById('custom-name');
+const setNameBtn=document.getElementById('set-name');
+const greetingEl=document.getElementById('greeting');
+
+let transactions=JSON.parse(localStorage.getItem('transactions'))||[];
+let categoryColors={};
+let currency=localStorage.getItem('currency')||'GHS';
+
+let incomePieChart, expensePieChart, balanceLineChart;
+
+function saveAll(){
+  localStorage.setItem('transactions',JSON.stringify(transactions));
+  localStorage.setItem('currency',currency);
+}
+
+function assignCategoryColor(category){
+  if(!categoryColors[category]){
+    const h=Math.floor(Math.random()*360);
+    categoryColors[category]=`hsl(${h},70%,60%)`;
+  }
+  return categoryColors[category];
+}
+
+function populateMonthFilter(){
+  const months=[...new Set(transactions.map(t=>t.date.slice(0,7)))];
+  monthFilter.innerHTML='<option value="all">All Months</option>';
+  months.forEach(m=>{
+    monthFilter.innerHTML+=`<option value="${m}">${m}</option>`;
+  });
+}
+
+function formatCurrency(value){return currency+' '+value.toFixed(2);}
+
+function renderTransactions(){
+  historyTableBody.innerHTML='';
+  let totalIncome=0,totalExpense=0;
+  const incomeCategories={},expenseCategories={};
+
+  let filteredTx=transactions;
+  if(monthFilter.value!=='all'){filteredTx=transactions.filter(t=>t.date.startsWith(monthFilter.value));}
+
+  filteredTx.forEach((tx,idx)=>{
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td>${tx.date}</td>
+    <td class="${tx.type==='income'?'income-color':'expense-color'}">${tx.type}</td>
+    <td>${tx.category}</td>
+    <td class="${tx.type==='income'?'income-color':'expense-color'}">${formatCurrency(tx.amount)}</td>
+    <td><button class="edit-btn">Edit</button> <button class="delete-btn">Delete</button></td>`;
+    historyTableBody.appendChild(tr);
+
+    tr.querySelector('.edit-btn').addEventListener('click',()=>startEdit(idx));
+    tr.querySelector('.delete-btn').addEventListener('click',()=>deleteTransaction(idx));
+
+    if(tx.type==='income'){
+      totalIncome+=parseFloat(tx.amount);
+      incomeCategories[tx.category]=(incomeCategories[tx.category]||0)+parseFloat(tx.amount);
+    }
+    if(tx.type==='expense'){
+      totalExpense+=parseFloat(tx.amount);
+      expenseCategories[tx.category]=(expenseCategories[tx.category]||0)+parseFloat(tx.amount);
+    }
+  });
+
+  totalIncomeEl.textContent=formatCurrency(totalIncome);
+  totalExpenseEl.textContent=formatCurrency(totalExpense);
+  balanceEl.textContent=formatCurrency(totalIncome-totalExpense);
+
+  renderCharts(incomeCategories, expenseCategories);
+  populateMonthFilter();
+}
+
+form.addEventListener('submit',e=>{
+  e.preventDefault();
+  transactions.push({
+    type:typeEl.value,
+    amount:parseFloat(amountEl.value),
+    category:categoryEl.value,
+    date:dateEl.value||new Date().toISOString().split('T')[0]
+  });
+  saveAll();
+  form.reset();
+  renderTransactions();
+});
+
+function startEdit(idx){
+  const tx=transactions[idx];
+  typeEl.value=tx.type;
+  amountEl.value=tx.amount;
+  categoryEl.value=tx.category;
+  dateEl.value=tx.date;
+  window.scrollTo(0,0);
+}
+
+function deleteTransaction(idx){
+  if(confirm("Delete this transaction?")){
+    transactions.splice(idx,1);
+    saveAll();
+    renderTransactions();
+  }
+}
+
+monthFilter.addEventListener('change',renderTransactions);
+exportCSVBtn.addEventListener('click',()=>{
+  let csv='Date,Type,Category,Amount\n';
+  transactions.forEach(tx=>{
+    csv+=`${tx.date},${tx.type},${tx.category},${tx.amount}\n`;
+  });
+  const blob=new Blob([csv],{type:'text/csv'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;
+  a.download='transactions.csv';
+  a.click();
+  URL.revokeObjectURL(url);
+});
+
+function renderCharts(incomeCategories, expenseCategories){
+  const ctx1=document.getElementById('incomePieChart').getContext('2d');
+  const ctx2=document.getElementById('expensePieChart').getContext('2d');
+  const ctx3=document.getElementById('balanceLineChart').getContext('2d');
+
+  if(incomePieChart) incomePieChart.destroy();
+  if(expensePieChart) expensePieChart.destroy();
+  if(balanceLineChart) balanceLineChart.destroy();
+
+  incomePieChart=new Chart(ctx1,{type:'pie',data:{labels:Object.keys(incomeCategories),datasets:[{data:Object.values(incomeCategories),backgroundColor:Object.keys(incomeCategories).map(c=>assignCategoryColor(c))}]}});
+
+  expensePieChart=new Chart(ctx2,{type:'pie',data:{labels:Object.keys(expenseCategories),datasets:[{data:Object.values(expenseCategories),backgroundColor:Object.keys(expenseCategories).map(c=>assignCategoryColor(c))}]}});
+
+  const sortedTx=[...transactions].sort((a,b)=>new Date(a.date)-new Date(b.date));
+  const labels=[], incomeData=[], expenseData=[], balanceData=[];
+  let cumIncome=0, cumExpense=0;
+
+  sortedTx.forEach(tx=>{
+    labels.push(tx.date);
+    if(tx.type==='income') cumIncome+=tx.amount;
+    if(tx.type==='expense') cumExpense+=tx.amount;
+    incomeData.push(cumIncome);
+    expenseData.push(cumExpense);
+    balanceData.push(cumIncome - cumExpense);
+  });
+
+  balanceLineChart=new Chart(ctx3,{
+    type:'line',
+    data:{
+      labels:labels,
+      datasets:[
+        {label:'Net Balance', data:balanceData, borderColor:'#2196f3', backgroundColor:'rgba(33,150,243,0.2)', fill:false, tension:0.4, pointRadius:4},
+        {label:'Cumulative Income', data:incomeData, borderColor:'#4caf50', backgroundColor:'rgba(76,175,80,0.2)', fill:false, tension:0.4, pointRadius:3},
+        {label:'Cumulative Expenses', data:expenseData, borderColor:'#f44336', backgroundColor:'rgba(244,67,54,0.2)', fill:false, tension:0.4, pointRadius:3}
+      ]
+    },
+    options:{
+      responsive:true,
+      animation:{duration:800,easing:'easeInOutQuart'},
+      interaction:{mode:'index',intersect:false},
+      scales:{y:{beginAtZero:true}}
+    }
+  });
+}
+
+currencySelect.addEventListener('change',()=>{
+  currency=currencySelect.value;
+  saveAll();
+  renderTransactions();
+});
+
+// Update greeting when user enters name
+setNameBtn.addEventListener('click', () => {
+  const name = customName.value.trim();
+  if (name) {
+    greetingEl.textContent = `Hello ${name}, we’re here to help you track, manage, and grow your finances.`;
+    localStorage.setItem('username', name);
+    customName.value = '';
+  }
+});
+
+// On page load, check if name is saved
+window.addEventListener('load', () => {
+  const storedName = localStorage.getItem('username');
+  if (storedName) {
+    greetingEl.textContent = `Hello ${storedName}, we’re here to help you track, manage, and grow your finances.`;
+  }
+});
+
+// Initialize budgets from localStorage or empty
+let budgets = JSON.parse(localStorage.getItem('budgets')) || {};
+
+// Render the budget overview
+function renderBudgets(){
+  const overview = document.getElementById('budget-overview');
+  overview.innerHTML='';
+
+  // Get current month in YYYY-MM format
+  const nowMonth = new Date().toISOString().slice(0,7);
+
+  // If no budgets yet
+  if(Object.keys(budgets).length === 0){
+    const card = document.createElement('div');
+    card.classList.add('card');
+    card.style.background='#f0f0f0';
+    card.innerHTML='<p>No budgets set yet.</p>';
+    overview.appendChild(card);
+    return;
+  }
+
+  // Loop through budgets
+  for(const cat in budgets){
+    const budgetAmount = budgets[cat];
+
+    // Calculate spent for this month
+    const spent = transactions
+      .filter(t => t.type==='expense' && t.category===cat && t.date.startsWith(nowMonth))
+      .reduce((sum, t) => sum + t.amount, 0);
+
+    const remaining = budgetAmount - spent;
+    const percentUsed = (spent / budgetAmount) * 100;
+
+    const card = document.createElement('div');
+    card.classList.add('card');
+    card.innerHTML = `<h4>${cat}</h4>
+                      <p>Budget: ${formatCurrency(budgetAmount)}</p>
+                      <p>Spent: ${formatCurrency(spent)}</p>
+                      <p>Remaining: ${formatCurrency(remaining)}</p>`;
+
+    // Warning if near limit
+    if(percentUsed >= 90){
+      card.style.background='#ffe6e6';
+      card.style.border='1px solid #f44336';
+      card.innerHTML += `<p style="color:#f44336;font-weight:bold;">⚠ Near budget limit!</p>`;
+    }
+
+    overview.appendChild(card);
+  }
+}
+
+// Set new budget
+document.getElementById('set-budget').addEventListener('click', ()=>{
+  const cat = document.getElementById('budget-category').value.trim();
+  const amt = parseFloat(document.getElementById('budget-amount').value);
+  if(!cat || isNaN(amt) || amt <= 0){
+    alert("Enter valid category and amount");
+    return;
+  }
+
+  budgets[cat] = amt;
+  localStorage.setItem('budgets', JSON.stringify(budgets));
+
+  // Clear input fields
+  document.getElementById('budget-category').value='';
+  document.getElementById('budget-amount').value='';
+
+  renderBudgets();
+});
+
+// Render budgets when transactions change
+const originalRenderTransactions = renderTransactions;
+renderTransactions = function(){
+  originalRenderTransactions();
+  renderBudgets();
+}
+
+// Initial render
+renderBudgets();
+
+function renderBudgets() {
+  const overview = document.getElementById('budget-overview');
+  overview.innerHTML = '';
+
+  const nowMonth = new Date().toISOString().slice(0, 7);
+
+  if (Object.keys(budgets).length === 0) {
+    const card = document.createElement('div');
+    card.classList.add('card');
+    card.style.background = '#f0f0f0';
+    card.innerHTML = '<p>No budgets set yet.</p>';
+    overview.appendChild(card);
+    return;
+  }
+
+  for (const cat in budgets) {
+    const budgetAmount = budgets[cat];
+
+    const spent = transactions
+      .filter(t => t.type === 'expense' && t.category === cat && t.date.startsWith(nowMonth))
+      .reduce((sum, t) => sum + t.amount, 0);
+
+    const remaining = budgetAmount - spent;
+    const percentUsed = (spent / budgetAmount) * 100;
+
+    const card = document.createElement('div');
+    card.classList.add('card');
+
+    const title = document.createElement('h4');
+    title.textContent = cat;
+    card.appendChild(title);
+
+    const pBudget = document.createElement('p');
+    pBudget.textContent = `Budget: ${formatCurrency(budgetAmount)}`;
+    card.appendChild(pBudget);
+
+    const pSpent = document.createElement('p');
+    pSpent.textContent = `Spent: ${formatCurrency(spent)}`;
+    card.appendChild(pSpent);
+
+    const pRemaining = document.createElement('p');
+    pRemaining.textContent = `Remaining: ${formatCurrency(remaining)}`;
+    card.appendChild(pRemaining);
+
+    // Add warning if near budget
+    if (percentUsed >= 90) {
+      card.style.background = '#ffe6e6';
+      card.style.border = '1px solid #f44336';
+      const warn = document.createElement('p');
+      warn.style.color = '#f44336';
+      warn.style.fontWeight = 'bold';
+      warn.textContent = '⚠ Near budget limit!';
+      card.appendChild(warn);
+    }
+
+    // Create delete button
+    const delBtn = document.createElement('button');
+    delBtn.textContent = 'Delete Budget';
+    delBtn.style.marginTop = '5px';
+    delBtn.style.padding = '5px 10px';
+    delBtn.addEventListener('click', () => {
+      if (confirm(`Delete budget for category "${cat}"?`)) {
+        delete budgets[cat];
+        localStorage.setItem('budgets', JSON.stringify(budgets));
+        renderBudgets();
+      }
+    });
+
+    card.appendChild(delBtn);
+    overview.appendChild(card);
+  }
+}
+
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js')
+    .then(() => console.log('Service Worker registered successfully'))
+    .catch(err => console.log('Service Worker registration failed:', err));
+}
+
+
+let deferredPrompt;
+const installBtn = document.getElementById("installBtn");
+
+window.addEventListener("beforeinstallprompt", e => {
+  e.preventDefault();
+  deferredPrompt = e;
+  installBtn.style.display = "inline-block";
+});
+
+installBtn.addEventListener("click", () => {
+  deferredPrompt.prompt();
+  deferredPrompt.userChoice.then(() => {
+    installBtn.style.display = "none";
+  });
+});
+
+
+renderTransactions();
+</script>
+</body>
+</html>

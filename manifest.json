@@ -1,0 +1,21 @@
+{
+  "name": "Pocket Finance",
+  "short_name": "PocketFinance",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#f4f4f4",
+  "theme_color": "#4caf50",
+  "description": "Track, manage, and grow your finances beyond borders.",
+  "icons": [
+    {
+      "src": "https://scontent.facc1-1.fna.fbcdn.net/v/t39.30808-6/624230780_122217096998287303_2728640232383810868_n.jpg?stp=dst-jpg_p180x540_tt6&_nc_cat=110&ccb=1-7&_nc_sid=127cfc&_nc_eui2=AeHwTKqU0u9GYKv3gL_DK8Fw0q5CE-JfnBjSrkIT4l-cGKzbDEHqvp3_ZCgwEukHHMPbZCToDjI4vf9NkFlV64Ob&_nc_ohc=npt0fGxslgEQ7kNvwEeXRNs&_nc_oc=AdmFUzWiz1gLQJtiqIjYDyjyvz9lymIK-A7cEWAsOUe_LiR6pnEhPnV0XaDvejYMhJo&_nc_zt=23&_nc_ht=scontent.facc1-1.fna&_nc_gid=IzRAdGZsKfK-EEXaQ9I80g&oh=00_AfsQqU6wOpu3Ivnz9jjVjGYItRK5Rd_x92U6lWv5TJ2OTA&oe=6985E010",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://scontent.facc1-1.fna.fbcdn.net/v/t39.30808-6/624230780_122217096998287303_2728640232383810868_n.jpg?stp=dst-jpg_p180x540_tt6&_nc_cat=110&ccb=1-7&_nc_sid=127cfc&_nc_eui2=AeHwTKqU0u9GYKv3gL_DK8Fw0q5CE-JfnBjSrkIT4l-cGKzbDEHqvp3_ZCgwEukHHMPbZCToDjI4vf9NkFlV64Ob&_nc_ohc=npt0fGxslgEQ7kNvwEeXRNs&_nc_oc=AdmFUzWiz1gLQJtiqIjYDyjyvz9lymIK-A7cEWAsOUe_LiR6pnEhPnV0XaDvejYMhJo&_nc_zt=23&_nc_ht=scontent.facc1-1.fna&_nc_gid=IzRAdGZsKfK-EEXaQ9I80g&oh=00_AfsQqU6wOpu3Ivnz9jjVjGYItRK5Rd_x92U6lWv5TJ2OTA&oe=6985E010",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
